@@ -31,7 +31,19 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps): ReactElement {
-  const [posts, setPosts] = useState(postsPagination);
+  const [posts, setPosts] = useState({
+    ...postsPagination,
+    results: postsPagination.results.map(data => ({
+      ...data,
+      first_publication_date: format(
+        new Date(data.first_publication_date),
+        'dd MMM y',
+        {
+          locale: ptBR,
+        }
+      ),
+    })),
+  });
 
   const handleFetchPosts = async (): Promise<undefined> => {
     if (!posts.next_page) {
@@ -72,11 +84,11 @@ export default function Home({ postsPagination }: HomeProps): ReactElement {
               <h2>{post.data.title}</h2>
               <p>{post.data.subtitle}</p>
               <footer>
-                <time className={styles.infoItem}>
+                <time className={commonStyles.infoItem}>
                   <FiCalendar size={20} />
                   {post.first_publication_date}
                 </time>
-                <span className={styles.infoItem}>
+                <span className={commonStyles.infoItem}>
                   <FiUser size={20} />
                   {post.data.author}
                 </span>
@@ -112,13 +124,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const posts = postsResponse.results.map(post => ({
     uid: post.uid,
-    first_publication_date: format(
-      new Date(post.first_publication_date),
-      'dd MMM y',
-      {
-        locale: ptBR,
-      }
-    ),
+    first_publication_date: post.first_publication_date,
     data: {
       title: post.data.title,
       subtitle: post.data.subtitle,

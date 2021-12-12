@@ -25,21 +25,6 @@
     display: flex;
     align-items: center;
     margin-top: 1.6rem;
-
-    .infoItem {
-      display: flex;
-      align-items: center;
-      font-size: 1rem;
-      color: var(--gray-300);
-
-      & > :first-child {
-        margin-right: 0.3rem;
-      }
-
-      & + .infoItem {
-        margin-left: 2rem;
-      }
-    }
   }
 
   &:hover {
