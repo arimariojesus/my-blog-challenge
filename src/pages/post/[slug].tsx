@@ -11,6 +11,7 @@ import { getPrismicClient } from '../../services/prismic';
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 import { prettyDate } from '../../helpers';
+import Comments from '../../components/Comments';
 
 interface Post {
   first_publication_date: string | null;
@@ -101,6 +102,8 @@ export default function Post({ post }: PostProps): JSX.Element {
               </Fragment>
             ))}
           </article>
+
+          <Comments />
         </div>
       </main>
     </>
