@@ -1,1 +1,14 @@
-// TODO
+.content {
+  display: flex;
+  align-items: center;
+
+  width: 100%;
+  max-width: 720px;
+  height: 7rem;
+  margin: 0 auto;
+
+
+  @media (max-width: 720px) {
+    padding: 0 3rem;
+  }
+}
