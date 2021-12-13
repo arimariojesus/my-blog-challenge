@@ -95,7 +95,11 @@
     }
   }
 
+  a:first-child {
+    padding-right: 1rem;
+  }
   a:last-child {
     text-align: right;
+    padding-left: 1rem;
   }
 }

@@ -84,7 +84,7 @@ export default function Home({
     <main className={commonStyles.container}>
       <div className={styles.posts}>
         {posts.results.map(post => (
-          <Link href={`/post/${post.uid}`}>
+          <Link href={`/post/${post.uid}`} key={post.uid}>
             <a className={styles.post} key={post.uid}>
               <h2>{post.data.title}</h2>
               <p>{post.data.subtitle}</p>

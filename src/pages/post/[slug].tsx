@@ -11,12 +11,13 @@ import { getPrismicClient } from '../../services/prismic';
 
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
-import { prettyDate } from '../../helpers';
+import { prettyDate, prettyDateWithHour } from '../../helpers';
 import Comments from '../../components/Comments';
 import { ExitPreviewButton } from '../../components/ExitPreviewButton';
 
 interface Post {
   uid?: string;
+  last_publication_date?: string | null;
   first_publication_date: string | null;
   data: {
     title: string;
@@ -72,7 +73,10 @@ export default function Post({
     heading: cont.heading,
     body: RichText.asHtml(cont.body),
   }));
-  const updatedAtformated = prettyDate(post.first_publication_date);
+  const publicationAtFormated = prettyDate(post.first_publication_date);
+  const updatedAtFormated = post.last_publication_date
+    ? prettyDateWithHour(post.last_publication_date)
+    : null;
 
   return (
     <>
@@ -90,7 +94,7 @@ export default function Post({
               <div>
                 <time className={commonStyles.infoItem}>
                   <FiCalendar size={20} />
-                  {updatedAtformated}
+                  {publicationAtFormated}
                 </time>
                 <span className={commonStyles.infoItem}>
                   <FiUser size={20} />
@@ -101,6 +105,11 @@ export default function Post({
                   {`${getEstimatedReadingTime()} min`}
                 </time>
               </div>
+              {updatedAtFormated && (
+                <p className={commonStyles.updatedAt}>
+                  *editado em {updatedAtFormated}
+                </p>
+              )}
             </header>
 
             {content.map(section => (

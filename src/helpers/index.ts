@@ -6,3 +6,9 @@ export const prettyDate = (date: string): string => {
     locale: ptBR,
   });
 };
+
+export const prettyDateWithHour = (hour: string): string => {
+  return format(new Date(hour), "dd MMM y, à's' HH:mm", {
+    locale: ptBR,
+  });
+};
