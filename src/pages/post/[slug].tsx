@@ -12,6 +12,7 @@ import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 import { prettyDate } from '../../helpers';
 import Comments from '../../components/Comments';
+import { ExitPreviewButton } from '../../components/ExitPreviewButton';
 
 interface Post {
   first_publication_date: string | null;
@@ -33,9 +34,10 @@ interface Post {
 
 interface PostProps {
   post: Post;
+  preview: boolean;
 }
 
-export default function Post({ post }: PostProps): JSX.Element {
+export default function Post({ post, preview }: PostProps): JSX.Element {
   const router = useRouter();
 
   if (router.isFallback) {
@@ -105,6 +107,8 @@ export default function Post({ post }: PostProps): JSX.Element {
 
           <Comments />
         </div>
+
+        {preview && <ExitPreviewButton />}
       </main>
     </>
   );
@@ -129,15 +133,24 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({
+  params,
+  preview = false,
+  previewData,
+}) => {
   const { slug } = params;
 
   const prismic = getPrismicClient();
-  const post = await prismic.getByUID('post', String(slug), {});
+  const post = await prismic.getByUID('post', String(slug), {
+    ref: previewData?.ref ?? null,
+  });
+
+  console.log(post);
 
   return {
     props: {
       post,
+      preview,
     },
   };
 };

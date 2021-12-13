@@ -1,4 +1,5 @@
 import Document, { Html, Head, NextScript, Main } from 'next/document';
+import { repoName } from '../config/prismic';
 
 export default class MyDocument extends Document {
   render(): JSX.Element {
@@ -13,6 +14,12 @@ export default class MyDocument extends Document {
           />
 
           <title>SpaceTravelling</title>
+
+          <script
+            async
+            defer
+            src={`https://static.cdn.prismic.io/prismic.js?new=true&repo=${repoName}`}
+          />
         </Head>
         <body>
           <Main />
