@@ -1,6 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
+import Link from 'next/link';
 import Prismic from '@prismicio/client';
 
 import { FiUser, FiCalendar, FiClock } from 'react-icons/fi';
@@ -15,6 +16,7 @@ import Comments from '../../components/Comments';
 import { ExitPreviewButton } from '../../components/ExitPreviewButton';
 
 interface Post {
+  uid?: string;
   first_publication_date: string | null;
   data: {
     title: string;
@@ -35,9 +37,16 @@ interface Post {
 interface PostProps {
   post: Post;
   preview: boolean;
+  prevPost: Post | null;
+  nextPost: Post | null;
 }
 
-export default function Post({ post, preview }: PostProps): JSX.Element {
+export default function Post({
+  post,
+  preview,
+  prevPost,
+  nextPost,
+}: PostProps): JSX.Element {
   const router = useRouter();
 
   if (router.isFallback) {
@@ -105,6 +114,31 @@ export default function Post({ post, preview }: PostProps): JSX.Element {
             ))}
           </article>
 
+          <span className={styles.separator} />
+
+          <section className={styles.recommendedWrapper}>
+            {prevPost ? (
+              <Link href={`/post/${prevPost.uid}`}>
+                <a>
+                  <h6>{prevPost.data.title}</h6>
+                  <p>Post anterior</p>
+                </a>
+              </Link>
+            ) : (
+              <br />
+            )}
+            {nextPost ? (
+              <Link href={`/post/${nextPost.uid}`}>
+                <a>
+                  <h6>{nextPost.data.title}</h6>
+                  <p>Proximo post</p>
+                </a>
+              </Link>
+            ) : (
+              <br />
+            )}
+          </section>
+
           <Comments />
         </div>
 
@@ -145,12 +179,26 @@ export const getStaticProps: GetStaticProps = async ({
     ref: previewData?.ref ?? null,
   });
 
-  console.log(post);
+  const postsResponse = await prismic.query(
+    [Prismic.Predicates.at('document.type', 'post')],
+    {
+      fetch: ['posts.title'],
+      pageSize: 100,
+    }
+  );
+  const currentPostIndex = postsResponse.results.findIndex(
+    item => item.id === post.id
+  );
+
+  const prevPost = postsResponse.results[currentPostIndex - 1] ?? null;
+  const nextPost = postsResponse.results[currentPostIndex + 1] ?? null;
 
   return {
     props: {
       post,
       preview,
+      prevPost,
+      nextPost,
     },
   };
 };

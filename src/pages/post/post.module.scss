@@ -55,3 +55,47 @@
     }
   }
 }
+
+.separator {
+  display: block;
+  max-width: 720px;
+  height: 1px;
+  width: 100%;
+  margin: 3rem auto;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.recommendedWrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+
+  a {
+    display: block;
+    padding: 2rem 0;
+    transition: background 0.2s;
+
+    h6 {
+      font-weight: 400;
+      font-size: 1.25rem;
+      color: var(--white);
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      font-weight: bold;
+      font-size: 1rem;
+      color: var(--pink);
+    }
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.025);
+    }
+  }
+
+  a:last-child {
+    text-align: right;
+  }
+}
